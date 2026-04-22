@@ -14,7 +14,7 @@ const messages = [
   "📡 Finding signal..."
 ];
 
-// 🔥 loader animation
+// 🔥 loader
 function showLoader() {
   let loader = document.getElementById("loader");
   let i = 0;
@@ -33,107 +33,109 @@ function hideLoader() {
   clearInterval(loaderInterval);
 }
 
-// 🔥 MAIN FUNCTION (no popup block)
-function openWithLoader(url) {
-  let q = document.getElementById("search").value;
+// 🔥 TAB SYSTEM (FIXED)
+let tabCount = 0;
 
-  if (q === "") {
-    alert("Enter something first!");
-    return;
-  }
+function openTab(name, url) {
+  let tabs = document.querySelector(".tabs");
+  let viewer = document.getElementById("viewer");
 
-  showLoader();
+  tabCount++;
 
-  let newTab = window.open("about:blank", "_blank");
+ let tab = document.createElement("div");
+tab.className = "tab active";
 
-  if (!newTab) {
-    alert("Popup blocked!");
-    hideLoader();
-    return;
-  }
+// 🔥 get search text
+let q = document.getElementById("search").value;
 
-  // 🔥 FULL SCREEN LOADING PAGE (centered)
-  newTab.document.write(`
-    <html>
-    <head>
-      <title>Loading...</title>
-      <style>
-        body {
-          margin: 0;
-          background: #0b1320;
-          color: #00d4ff;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          font-family: Arial;
-          flex-direction: column;
-        }
+// short version (UI clean rakhne ke liye)
+let shortQ = q.length > 12 ? q.substring(0, 12) + "..." : q;
 
-        .msg {
-          font-size: 20px;
-          animation: fade 1s infinite alternate;
-        }
+// 🔥 tab text
+tab.innerText = `${name} • ${shortQ}`;
 
-        @keyframes fade {
-          from { opacity: 0.5; }
-          to { opacity: 1; }
-        }
-      </style>
-    </head>
-    <body>
+// full text on hover
+tab.title = q;
 
-      <div class="msg" id="msg">🤔 Thinking hard...</div>
+// remove active
+document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
 
-      <script>
-        const messages = [
-          "🤔 Thinking hard...",
-          "🐢 Slow network... chill bro",
-          "🚀 Launching search...",
-          "😴 Internet is waking up...",
-          "📡 Finding signal..."
-        ];
+tabs.appendChild(tab);
 
-        let i = 0;
-        setInterval(() => {
-          i = (i + 1) % messages.length;
-          document.getElementById("msg").innerText = messages[i];
-        }, 2000);
-      </script>
+showLoader();
 
-    </body>
-    </html>
-  `);
+  // 🔥 try iframe load
+  viewer.src = url;
 
-  // 🔥 actual site load
+  // ⏳ check if blocked
   setTimeout(() => {
-    newTab.location.href = url + encodeURIComponent(q);
     hideLoader();
-  }, 12000); // tu change kar sakta hai
+
+    try {
+      // अगर iframe block hua to error ayega
+      let test = viewer.contentWindow.location.href;
+
+      // agar blank ya about:blank hua → blocked
+      if (!test || test === "about:blank") {
+        window.open(url, "_blank");
+      }
+
+    } catch (e) {
+      // 🔥 definitely blocked → open new tab
+      window.open(url, "_blank");
+    }
+
+  }, 2000);
+
+  // 🔁 tab switch
+  tab.onclick = () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    showLoader();
+
+    setTimeout(() => {
+      viewer.src = url;
+      hideLoader();
+    }, 1000);
+  };
 }
 
-// ✅ ALL SEARCH FUNCTIONS
+// 🔍 SEARCH FUNCTIONS
 
 function searchGoogle() {
-  openWithLoader("https://www.google.com/search?q=");
+  let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
+
+  openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q));
 }
 
 function searchYouTube() {
-  openWithLoader("https://www.youtube.com/results?search_query=");
-}
+  let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
 
-function searchInstagram() {
-  openWithLoader("https://www.instagram.com/explore/tags/");
-}
-
-function searchFacebook() {
-  openWithLoader("https://www.google.com/search?q=site:facebook.com ");
+  openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q));
 }
 
 function searchTwitter() {
-  openWithLoader("https://twitter.com/search?q=");
+  let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
+
+  openTab("Twitter", "https://twitter.com/search?q=" + encodeURIComponent(q));
+}
+
+// ❌ ये block होते हैं → Google fallback
+function searchFacebook() {
+  let q = document.getElementById("search").value;
+  openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q));
+}
+
+function searchInstagram() {
+  let q = document.getElementById("search").value;
+  openTab("Instagram", "https://www.google.com/search?q=site:instagram.com " + encodeURIComponent(q));
 }
 
 function searchLinkedIn() {
-  openWithLoader("https://www.google.com/search?q=site:linkedin.com ");
+  let q = document.getElementById("search").value;
+  openTab("LinkedIn", "https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q));
 }
