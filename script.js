@@ -52,7 +52,23 @@ let q = document.getElementById("search").value;
 let shortQ = q.length > 12 ? q.substring(0, 12) + "..." : q;
 
 // 🔥 tab text
-tab.innerText = `${name} • ${shortQ}`;
+tab.innerHTML = `
+  <span class="tab-text">${name} • ${shortQ}</span>
+  <span class="tab-close">❌</span>
+`;
+
+let closeBtn = tab.querySelector(".tab-close");
+
+closeBtn.onclick = (e) => {
+  e.stopPropagation(); // tab click trigger na ho
+
+  tab.remove();
+
+  // agar active tab delete hua → reset viewer
+  if (tab.classList.contains("active")) {
+    document.getElementById("viewer").src = "";
+  }
+};
 
 // full text on hover
 tab.title = q;
