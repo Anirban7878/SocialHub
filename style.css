@@ -177,6 +177,39 @@ iframe {
   transform: scale(1.2);
 }
 
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #111c2e;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.tab-text {
+  pointer-events: none;
+}
+
+.tab-refresh {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tab-refresh:hover {
+  transform: rotate(180deg);
+}
+
+.tab-close {
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tab-close:hover {
+  transform: scale(1.2);
+}
+
 /* Mobile */
 @media (max-width: 500px) {
   .search-box input {
