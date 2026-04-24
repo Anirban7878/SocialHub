@@ -1,6 +1,7 @@
+// 🔍 ENTER PRESS → MULTI SEARCH
 document.getElementById("search").addEventListener("keypress", function(e) {
   if (e.key === "Enter") {
-    searchGoogle();
+    searchAll();
   }
 });
 
@@ -14,7 +15,7 @@ const messages = [
   "📡 Finding signal..."
 ];
 
-// 🔥 loader
+// 🔥 LOADER
 function showLoader() {
   let loader = document.getElementById("loader");
   let i = 0;
@@ -33,125 +34,164 @@ function hideLoader() {
   clearInterval(loaderInterval);
 }
 
-// 🔥 TAB SYSTEM (FIXED)
-let tabCount = 0;
-
-function openTab(name, url) {
+// 🔥 TAB SYSTEM
+function openTab(name, url, isActive = true) {
   let tabs = document.querySelector(".tabs");
   let viewer = document.getElementById("viewer");
 
-  tabCount++;
+  let q = document.getElementById("search").value;
+  let shortQ = q.length > 12 ? q.substring(0, 12) + "..." : q;
 
- let tab = document.createElement("div");
-tab.className = "tab active";
+  let tab = document.createElement("div");
+  tab.className = "tab";
 
-// 🔥 get search text
-let q = document.getElementById("search").value;
+  tab.dataset.url = url;
 
-// short version (UI clean rakhne ke liye)
-let shortQ = q.length > 12 ? q.substring(0, 12) + "..." : q;
+  tab.innerHTML = `
+    <span class="tab-text">🌐 ${name} • ${shortQ}</span>
+    <span class="tab-refresh">🔄</span>
+    <span class="tab-close">❌</span>
+  `;
 
-// 🔥 tab text
-tab.innerHTML = `
-  <span class="tab-text">${name} • ${shortQ}</span>
-  <span class="tab-close">❌</span>
-`;
+  tab.title = q;
 
-let closeBtn = tab.querySelector(".tab-close");
+  tabs.appendChild(tab);
 
-closeBtn.onclick = (e) => {
-  e.stopPropagation(); // tab click trigger na ho
+  // 🔄 REFRESH
+  tab.querySelector(".tab-refresh").onclick = (e) => {
+    e.stopPropagation();
+    showLoader();
+    viewer.src = tab.dataset.url;
+    setTimeout(() => hideLoader(), 800);
+  };
 
-  tab.remove();
+  // ❌ CLOSE
+  tab.querySelector(".tab-close").onclick = (e) => {
+    e.stopPropagation();
 
-  // agar active tab delete hua → reset viewer
-  if (tab.classList.contains("active")) {
-    document.getElementById("viewer").src = "";
-  }
-};
+    let wasActive = tab.classList.contains("active");
+    tab.remove();
 
-// full text on hover
-tab.title = q;
+    if (wasActive) {
+      let allTabs = document.querySelectorAll(".tab");
 
-// remove active
-document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-
-tabs.appendChild(tab);
-
-showLoader();
-
-  // 🔥 try iframe load
-  viewer.src = url;
-
-  // ⏳ check if blocked
-  setTimeout(() => {
-    hideLoader();
-
-    try {
-      // अगर iframe block hua to error ayega
-      let test = viewer.contentWindow.location.href;
-
-      // agar blank ya about:blank hua → blocked
-      if (!test || test === "about:blank") {
-        window.open(url, "_blank");
+      if (allTabs.length > 0) {
+        let lastTab = allTabs[allTabs.length - 1];
+        lastTab.classList.add("active");
+        viewer.src = lastTab.dataset.url;
+      } else {
+        viewer.src = "";
       }
-
-    } catch (e) {
-      // 🔥 definitely blocked → open new tab
-      window.open(url, "_blank");
     }
+  };
 
-  }, 2000);
-
-  // 🔁 tab switch
+  // 🔁 SWITCH TAB
   tab.onclick = () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
 
     showLoader();
+    setTimeout(() => {
+      viewer.src = tab.dataset.url;
+      hideLoader();
+    }, 800);
+  };
+
+  // 🔥 ACTIVE / BACKGROUND CONTROL
+  if (isActive) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    showLoader();
+    viewer.src = url;
 
     setTimeout(() => {
-      viewer.src = url;
       hideLoader();
-    }, 1000);
-  };
+
+      // ⚠️ iframe block detect
+      try {
+        let test = viewer.contentWindow.location.href;
+        if (!test || test === "about:blank") {
+          window.open(url, "_blank");
+        }
+      } catch (e) {
+        window.open(url, "_blank");
+      }
+
+    }, 2000);
+  }
 }
 
-// 🔍 SEARCH FUNCTIONS
+// 🔍 SINGLE SEARCHES
 
 function searchGoogle() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
-
   openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q));
 }
 
 function searchYouTube() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
-
   openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q));
 }
 
 function searchTwitter() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
-
   openTab("Twitter", "https://twitter.com/search?q=" + encodeURIComponent(q));
 }
 
-// ❌ ये block होते हैं → Google fallback
 function searchFacebook() {
   let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
   openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q));
 }
 
 function searchInstagram() {
   let q = document.getElementById("search").value;
-  openTab("Instagram", "https://www.google.com/search?q=site:instagram.com " + encodeURIComponent(q));
+  if(q === "") return alert("Enter something first!");
+
+  if(q.startsWith("@")) {
+    openTab("Instagram", "https://www.instagram.com/" + q.substring(1));
+  } else {
+    openTab("Instagram", "https://www.instagram.com/explore/tags/" + encodeURIComponent(q));
+  }
 }
 
 function searchLinkedIn() {
   let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
   openTab("LinkedIn", "https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q));
+}
+
+// 🚀 MULTI SEARCH (MAIN FEATURE)
+
+function searchAll() {
+  let q = document.getElementById("search").value;
+  if(q === "") return alert("Enter something first!");
+
+  // first visible tab
+  openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q), true);
+
+  // background tabs
+  setTimeout(() => {
+    openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q), false);
+  }, 300);
+
+  setTimeout(() => {
+    openTab("Twitter", "https://twitter.com/search?q=" + encodeURIComponent(q), false);
+  }, 600);
+
+  setTimeout(() => {
+    openTab("Instagram", "https://www.instagram.com/explore/tags/" + encodeURIComponent(q), false);
+  }, 900);
+
+  setTimeout(() => {
+    openTab("LinkedIn", "https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q), false);
+  }, 1200);
+
+  setTimeout(() => {
+    openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q), false);
+  }, 1500);
 }
