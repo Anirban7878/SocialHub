@@ -5,18 +5,33 @@ document.getElementById("search").addEventListener("keypress", function(e) {
   }
 });
 
+// 🌙 THEME TOGGLE
 const toggleBtn = document.getElementById("themeToggle");
 
 toggleBtn.onclick = () => {
   document.body.classList.toggle("light-mode");
 
-  if (document.body.classList.contains("light-mode")) {
-    toggleBtn.innerText = "☀️";
-  } else {
-    toggleBtn.innerText = "🌙";
-  }
+  toggleBtn.innerText = document.body.classList.contains("light-mode")
+    ? "☀️"
+    : "🌙";
 };
 
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsPanel = document.getElementById("settingsPanel");
+
+// toggle panel
+settingsBtn.onclick = () => {
+  settingsPanel.classList.toggle("active");
+};
+
+// click outside → close
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".settings")) {
+    settingsPanel.classList.remove("active");
+  }
+});
+
+// 🔥 LOADER MESSAGES
 let loaderInterval;
 
 const messages = [
@@ -27,7 +42,7 @@ const messages = [
   "📡 Finding signal..."
 ];
 
-// 🔥 LOADER
+// 🔥 SHOW LOADER
 function showLoader() {
   let loader = document.getElementById("loader");
   let i = 0;
@@ -41,12 +56,63 @@ function showLoader() {
   }, 1000);
 }
 
+// 🔥 HIDE LOADER
 function hideLoader() {
   document.getElementById("loader").style.display = "none";
   clearInterval(loaderInterval);
 }
 
+// ==========================
+// 🔥 HISTORY SYSTEM
+// ==========================
+
+// SAVE
+function saveHistory(q) {
+  let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+  history = history.filter(item => item !== q); // remove duplicate
+  history.push(q);
+
+  if (history.length > 10) history.shift();
+
+  localStorage.setItem("searchHistory", JSON.stringify(history));
+}
+
+// LOAD
+function loadHistory() {
+  let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+  let list = document.getElementById("historyList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  history.slice().reverse().forEach(item => {
+    let li = document.createElement("li");
+    li.innerText = item;
+
+    li.onclick = () => {
+      document.getElementById("search").value = item;
+      searchAll();
+    };
+
+    list.appendChild(li);
+  });
+}
+
+// CLEAR
+function clearHistory() {
+  localStorage.removeItem("searchHistory");
+  loadHistory();
+}
+
+// LOAD ON START
+loadHistory();
+
+// ==========================
 // 🔥 TAB SYSTEM
+// ==========================
+
 function openTab(name, url, isActive = true) {
   let tabs = document.querySelector(".tabs");
   let viewer = document.getElementById("viewer");
@@ -56,7 +122,6 @@ function openTab(name, url, isActive = true) {
 
   let tab = document.createElement("div");
   tab.className = "tab";
-
   tab.dataset.url = url;
 
   tab.innerHTML = `
@@ -66,7 +131,6 @@ function openTab(name, url, isActive = true) {
   `;
 
   tab.title = q;
-
   tabs.appendChild(tab);
 
   // 🔄 REFRESH
@@ -74,7 +138,7 @@ function openTab(name, url, isActive = true) {
     e.stopPropagation();
     showLoader();
     viewer.src = tab.dataset.url;
-    setTimeout(() => hideLoader(), 800);
+    setTimeout(hideLoader, 800);
   };
 
   // ❌ CLOSE
@@ -88,16 +152,16 @@ function openTab(name, url, isActive = true) {
       let allTabs = document.querySelectorAll(".tab");
 
       if (allTabs.length > 0) {
-        let lastTab = allTabs[allTabs.length - 1];
-        lastTab.classList.add("active");
-        viewer.src = lastTab.dataset.url;
+        let last = allTabs[allTabs.length - 1];
+        last.classList.add("active");
+        viewer.src = last.dataset.url;
       } else {
         viewer.src = "";
       }
     }
   };
 
-  // 🔁 SWITCH TAB
+  // 🔁 SWITCH
   tab.onclick = () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
@@ -109,7 +173,7 @@ function openTab(name, url, isActive = true) {
     }, 800);
   };
 
-  // 🔥 ACTIVE / BACKGROUND CONTROL
+  // 🔥 ACTIVE LOAD
   if (isActive) {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
@@ -120,49 +184,68 @@ function openTab(name, url, isActive = true) {
     setTimeout(() => {
       hideLoader();
 
-      // ⚠️ iframe block detect
       try {
         let test = viewer.contentWindow.location.href;
         if (!test || test === "about:blank") {
           window.open(url, "_blank");
         }
-      } catch (e) {
+      } catch {
         window.open(url, "_blank");
       }
-
     }, 2000);
   }
 }
 
-// 🔍 SINGLE SEARCHES
+// ==========================
+// 🔍 SEARCH FUNCTIONS
+// ==========================
 
 function searchGoogle() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
+
   openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q));
 }
 
 function searchYouTube() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
+
   openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q));
 }
 
 function searchTwitter() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
+
   openTab("Twitter", "https://twitter.com/search?q=" + encodeURIComponent(q));
 }
 
 function searchFacebook() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
+
   openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q));
 }
 
 function searchInstagram() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
 
   if(q.startsWith("@")) {
     openTab("Instagram", "https://www.instagram.com/" + q.substring(1));
@@ -174,19 +257,26 @@ function searchInstagram() {
 function searchLinkedIn() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
+
+  saveHistory(q);
+  loadHistory();
+
   openTab("LinkedIn", "https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q));
 }
 
-// 🚀 MULTI SEARCH (MAIN FEATURE)
+// ==========================
+// 🚀 MULTI SEARCH (MAIN)
+// ==========================
 
 function searchAll() {
   let q = document.getElementById("search").value;
   if(q === "") return alert("Enter something first!");
 
-  // first visible tab
+  saveHistory(q);
+  loadHistory();
+
   openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q), true);
 
-  // background tabs
   setTimeout(() => {
     openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q), false);
   }, 300);
