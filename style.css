@@ -142,6 +142,83 @@ h1 {
   transform: translateY(-2px);
 }
 
+.top-bar {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ⚙️ Settings icon */
+#settingsBtn {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Panel */
+.settings-panel {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 250px;
+  background: #111c2e;
+  color: white;
+  border-radius: 10px;
+  padding: 15px;
+  display: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* show */
+.settings-panel.active {
+  display: block;
+}
+
+/* History list */
+#historyList {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 10px 0;
+  padding: 0;
+}
+
+#historyList li {
+  padding: 6px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#historyList li:hover {
+  background: #00d4ff;
+  color: black;
+}
+
+/* Clear btn */
+.settings-panel button {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: #ff4d4d;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.settings-panel {
+  transform: scale(0.9);
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.settings-panel.active {
+  transform: scale(1);
+  opacity: 1;
+}
+
 /* Grid */
 .platforms {
   display: grid;
