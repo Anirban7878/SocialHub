@@ -8,10 +8,69 @@
 
 /* Body */
 body {
-  background: linear-gradient(135deg, #0b1320, #020617);
-  color: white;
+  background: var(--bg-gradient);
+  color: var(--text-color);
   text-align: center;
   padding: 60px 20px;
+}
+
+/* 🌙 DARK DEFAULT */
+:root {
+  --bg-gradient: linear-gradient(135deg, #0b1320, #020617);
+  --text-color: #ededed;
+  --main-color: #00abf0;
+}
+
+/* ☀️ LIGHT MODE */
+.light-mode {
+  --bg-gradient: linear-gradient(135deg, #ffffff, #e6f0ff);
+  --text-color: #111;
+  --main-color: #0077ff;
+}
+
+.theme-switch {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  width: 50px;
+  height: 25px;
+  background: #444;
+  border-radius: 30px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "🌙";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 2px;
+  top: 1.5px;
+  background: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background: #00d4ff;
+}
+
+input:checked + .slider::before {
+  transform: translateX(25px);
+  content: "☀️";
 }
 
 .loader {
