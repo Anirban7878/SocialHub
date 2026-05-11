@@ -219,6 +219,26 @@ h1 {
   opacity: 1;
 }
 
+.usage-box {
+    background: #1a2332;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.usage-box h4 {
+    color: #00d4ff;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+#usageTime {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
 /* Grid */
 .platforms {
   display: grid;
