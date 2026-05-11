@@ -31,6 +31,24 @@ document.addEventListener("click", (e) => {
   }
 });
 
+let seconds = localStorage.getItem("usageSeconds") || 0;
+
+function updateUsageTime() {
+
+    seconds++;
+
+    localStorage.setItem("usageSeconds", seconds);
+
+    let hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    let secs = String(seconds % 60).padStart(2, '0');
+
+    document.getElementById("usageTime").innerText =
+        `${hrs}:${mins}:${secs}`;
+}
+
+setInterval(updateUsageTime, 1000);
+
 // 🔥 LOADER MESSAGES
 let loaderInterval;
 
