@@ -116,6 +116,12 @@ function loadHistory() {
   });
 }
 
+
+function toggleHistory() {
+    document.getElementById("historyList")
+        .classList.toggle("active");
+}
+
 // CLEAR
 function clearHistory() {
   localStorage.removeItem("searchHistory");
