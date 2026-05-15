@@ -8,10 +8,10 @@
 <body>
 
   <!-- THEME SWITCH -->
-<div class="theme-switch">
-  <input type="checkbox" id="themeToggle">
-  <label for="themeToggle" class="slider"></label>
-</div>
+  <div class="theme-switch">
+    <input type="checkbox" id="themeToggle">
+    <label for="themeToggle" class="slider"></label>
+  </div>
 
   <h1>🌐 SocialHub</h1>
   <p class="tagline">Search across the world’s top platforms</p>
@@ -24,56 +24,73 @@
 
   <div class="top-bar">
 
-  <!-- ⚙️ Settings -->
-  <div class="settings">
-    <span id="settingsBtn">⚙️</span>
+    <!-- ⚙️ Settings -->
+    <div class="settings">
+      <span id="settingsBtn">⚙️</span>
 
-    <div id="settingsPanel" class="settings-panel">
+      <div id="settingsPanel" class="settings-panel">
 
-      <!-- Usage Time -->
-      <div class="usage-box">
-        <h4>Browser Usage Time</h4>
-        <p id="usageTime">00:00:00</p>
+        <!-- Usage Time -->
+        <div class="usage-box">
+          <h4>Browser Usage Time</h4>
+          <p id="usageTime">00:00:00</p>
+        </div>
+
+        <!-- 🔥 History Dropdown -->
+        <div class="history-section">
+
+          <div class="history-header" onclick="toggleHistory()">
+            📜 History ▼
+          </div>
+
+          <ul id="historyList" class="history-list"></ul>
+
+          <button onclick="clearHistory()">🗑 Clear History</button>
+
+        </div>
+
       </div>
-
-      <!-- History -->
-      <h4>History</h4>
-      <ul id="historyList"></ul>
-
-      <button onclick="clearHistory()">🗑 Clear History</button>
     </div>
-  </div>
-</div>
 
+  </div>
+
+  <!-- Loader -->
   <div id="loader" class="loader">
-  🤔 Thinking hard... internet bhi soch raha hai...
-</div>
+    🤔 Thinking hard... internet bhi soch raha hai...
+  </div>
 
   <!-- Platforms -->
   <div class="platforms">
 
-  <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" onclick="searchGoogle()" class="logo">
-  
-  <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" onclick="searchYouTube()" class="logo">
-  
-  <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" onclick="searchInstagram()" class="logo">
-  
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" onclick="searchFacebook()" class="logo">
-  
-  <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" onclick="searchLinkedIn()" class="logo">
-  
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" onclick="searchTwitter()" class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
+      onclick="searchGoogle()" class="logo">
 
-</div>
+    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+      onclick="searchYouTube()" class="logo">
 
-<div class="tabs"></div>
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+      onclick="searchInstagram()" class="logo">
 
-<div class="tab-content">
-  <iframe id="viewer"></iframe>
-</div>
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+      onclick="searchFacebook()" class="logo">
 
-</div>
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+      onclick="searchLinkedIn()" class="logo">
+
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+      onclick="searchTwitter()" class="logo">
+
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs"></div>
+
+  <!-- Viewer -->
+  <div class="tab-content">
+    <iframe id="viewer"></iframe>
+  </div>
 
   <script src="script.js"></script>
+
 </body>
 </html>
