@@ -178,23 +178,51 @@ h1 {
 }
 
 /* History list */
-#historyList {
-  list-style: none;
-  max-height: 200px;
-  overflow-y: auto;
-  margin: 10px 0;
-  padding: 0;
+/* 🔥 History Dropdown */
+.history-header {
+    background: #1a2332;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.3s;
+    font-weight: 600;
+    user-select: none;
 }
 
-#historyList li {
-  padding: 6px;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+.history-header:hover {
+    background: #243247;
 }
 
-#historyList li:hover {
-  background: #00d4ff;
-  color: black;
+/* Hidden by default */
+.history-list {
+    display: none;
+    list-style: none;
+    max-height: 180px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 0;
+}
+
+/* Show when active */
+.history-list.active {
+    display: block;
+}
+
+/* Items */
+.history-list li {
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: #1a2332;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.history-list li:hover {
+    background: #00d4ff;
+    color: black;
 }
 
 /* Clear btn */
