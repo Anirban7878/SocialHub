@@ -136,6 +136,7 @@ loadHistory();
 // ==========================
 
 function openTab(name, url, isActive = true) {
+
   let tabs = document.querySelector(".tabs");
   let viewer = document.getElementById("viewer");
 
@@ -157,63 +158,120 @@ function openTab(name, url, isActive = true) {
 
   // 🔄 REFRESH
   tab.querySelector(".tab-refresh").onclick = (e) => {
+
     e.stopPropagation();
+
     showLoader();
+
+    // iframe
     viewer.src = tab.dataset.url;
+
+    // mobile new tab also
+    if (window.innerWidth <= 768) {
+      window.open(tab.dataset.url, "_blank");
+    }
+
     setTimeout(hideLoader, 800);
   };
 
   // ❌ CLOSE
   tab.querySelector(".tab-close").onclick = (e) => {
+
     e.stopPropagation();
 
     let wasActive = tab.classList.contains("active");
+
     tab.remove();
 
     if (wasActive) {
+
       let allTabs = document.querySelectorAll(".tab");
 
       if (allTabs.length > 0) {
+
         let last = allTabs[allTabs.length - 1];
+
         last.classList.add("active");
+
+        // iframe
         viewer.src = last.dataset.url;
+
+        // mobile new tab also
+        if (window.innerWidth <= 768) {
+          window.open(last.dataset.url, "_blank");
+        }
+
       } else {
+
         viewer.src = "";
+
       }
     }
   };
 
   // 🔁 SWITCH
   tab.onclick = () => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+    document.querySelectorAll(".tab")
+      .forEach(t => t.classList.remove("active"));
+
     tab.classList.add("active");
 
     showLoader();
+
     setTimeout(() => {
+
+      // iframe
       viewer.src = tab.dataset.url;
+
+      // mobile new tab also
+      if (window.innerWidth <= 768) {
+        window.open(tab.dataset.url, "_blank");
+      }
+
       hideLoader();
+
     }, 800);
   };
 
   // 🔥 ACTIVE LOAD
   if (isActive) {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+    document.querySelectorAll(".tab")
+      .forEach(t => t.classList.remove("active"));
+
     tab.classList.add("active");
 
     showLoader();
+
+    // iframe
     viewer.src = url;
 
+    // mobile new tab also
+    if (window.innerWidth <= 768) {
+      window.open(url, "_blank");
+    }
+
     setTimeout(() => {
+
       hideLoader();
 
       try {
+
         let test = viewer.contentWindow.location.href;
+
         if (!test || test === "about:blank") {
+
           window.open(url, "_blank");
+
         }
+
       } catch {
+
         window.open(url, "_blank");
+
       }
+
     }, 2000);
   }
 }
