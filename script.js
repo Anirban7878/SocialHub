@@ -135,10 +135,17 @@ loadHistory();
 // 🔥 TAB SYSTEM
 // ==========================
 
-function openTab(name, url, isActive = true) {
+function updateTabCount() {
+  let tabCount = document.querySelectorAll(".tab").length;
+  document.getElementById("tabCount").innerText = tabCount;
+}
 
+document.getElementById("tabButton").onclick = () => {
+  document.getElementById("tabs").classList.toggle("active");
+};
+
+function openTab(name, url, isActive = true) {
   let tabs = document.querySelector(".tabs");
-  let viewer = document.getElementById("viewer");
 
   let q = document.getElementById("search").value;
   let shortQ = q.length > 12 ? q.substring(0, 12) + "..." : q;
@@ -146,6 +153,7 @@ function openTab(name, url, isActive = true) {
   let tab = document.createElement("div");
   tab.className = "tab";
   tab.dataset.url = url;
+  tab.dataset.name = name;
 
   tab.innerHTML = `
     <span class="tab-text">🌐 ${name} • ${shortQ}</span>
@@ -155,88 +163,36 @@ function openTab(name, url, isActive = true) {
 
   tab.title = q;
   tabs.appendChild(tab);
+  updateTabCount();
 
   // 🔄 REFRESH
   tab.querySelector(".tab-refresh").onclick = (e) => {
-
     e.stopPropagation();
-
     showLoader();
-
-    // iframe
-    viewer.src = tab.dataset.url;
-
-    // mobile new tab also
-    if (window.innerWidth <= 768) {
-      window.open(tab.dataset.url, "_blank");
-    }
-
+    window.open(tab.dataset.url, tab.dataset.name);
     setTimeout(hideLoader, 800);
   };
 
   // ❌ CLOSE
   tab.querySelector(".tab-close").onclick = (e) => {
-
     e.stopPropagation();
-
-    let wasActive = tab.classList.contains("active");
-
     tab.remove();
-
-    if (wasActive) {
-
-      let allTabs = document.querySelectorAll(".tab");
-
-      if (allTabs.length > 0) {
-
-        let last = allTabs[allTabs.length - 1];
-
-        last.classList.add("active");
-
-        // iframe
-        viewer.src = last.dataset.url;
-
-        // mobile new tab also
-        if (window.innerWidth <= 768) {
-          window.open(last.dataset.url, "_blank");
-        }
-
-      } else {
-
-        viewer.src = "";
-
-      }
-    }
+    updateTabCount();
   };
 
   // 🔁 SWITCH
   tab.onclick = () => {
-
-    document.querySelectorAll(".tab")
-      .forEach(t => t.classList.remove("active"));
-
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
-
     showLoader();
-
     setTimeout(() => {
-
-      // iframe
-      viewer.src = tab.dataset.url;
-
-      // mobile new tab also
-      if (window.innerWidth <= 768) {
-        window.open(tab.dataset.url, "_blank");
-      }
-
+      window.open(tab.dataset.url, tab.dataset.name);
       hideLoader();
-
     }, 800);
   };
 
   // 🔥 ACTIVE LOAD
   if (isActive) {
-
     document.querySelectorAll(".tab")
       .forEach(t => t.classList.remove("active"));
 
@@ -244,34 +200,10 @@ function openTab(name, url, isActive = true) {
 
     showLoader();
 
-    // iframe
-    viewer.src = url;
-
-    // mobile new tab also
-    if (window.innerWidth <= 768) {
-      window.open(url, "_blank");
-    }
+    window.open(url, name);
 
     setTimeout(() => {
-
       hideLoader();
-
-      try {
-
-        let test = viewer.contentWindow.location.href;
-
-        if (!test || test === "about:blank") {
-
-          window.open(url, "_blank");
-
-        }
-
-      } catch {
-
-        window.open(url, "_blank");
-
-      }
-
     }, 2000);
   }
 }
@@ -355,25 +287,49 @@ function searchAll() {
   saveHistory(q);
   loadHistory();
 
-  openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q), true);
+  // Open all tabs immediately to avoid popup blocker
+  window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "Google");
+  
+  setTimeout(() => {
+    window.open("https://www.youtube.com/results?search_query=" + encodeURIComponent(q), "YouTube");
+  }, 100);
 
   setTimeout(() => {
-    openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q), false);
+    window.open("https://twitter.com/search?q=" + encodeURIComponent(q), "Twitter");
+  }, 200);
+
+  setTimeout(() => {
+    window.open("https://www.instagram.com/explore/tags/" + encodeURIComponent(q), "Instagram");
   }, 300);
 
   setTimeout(() => {
+    window.open("https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q), "LinkedIn");
+  }, 400);
+
+  setTimeout(() => {
+    window.open("https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q), "Facebook");
+  }, 500);
+
+  // Also create tabs in panel
+  openTab("Google", "https://www.google.com/search?q=" + encodeURIComponent(q), false);
+  
+  setTimeout(() => {
+    openTab("YouTube", "https://www.youtube.com/results?search_query=" + encodeURIComponent(q), false);
+  }, 100);
+
+  setTimeout(() => {
     openTab("Twitter", "https://twitter.com/search?q=" + encodeURIComponent(q), false);
-  }, 600);
+  }, 200);
 
   setTimeout(() => {
     openTab("Instagram", "https://www.instagram.com/explore/tags/" + encodeURIComponent(q), false);
-  }, 900);
+  }, 300);
 
   setTimeout(() => {
     openTab("LinkedIn", "https://www.google.com/search?q=site:linkedin.com " + encodeURIComponent(q), false);
-  }, 1200);
+  }, 400);
 
   setTimeout(() => {
     openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q), false);
-  }, 1500);
+  }, 500);
 }
