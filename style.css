@@ -34,6 +34,18 @@
   --muted: #34495e;
 }
 
+/* LIGHT MODE TAB COUNT FIX */
+
+.light-mode #tabButton {
+  background: rgba(255,255,255,0.95) !important;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.light-mode #tabCount {
+  color: #111 !important;
+  font-weight: 700;
+}
+
 /* BODY */
 body {
   min-height: 100vh;
