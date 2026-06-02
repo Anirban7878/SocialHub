@@ -577,3 +577,21 @@ iframe {
     transition-duration: 0.15s !important;
   }
 }
+
+@media (max-width: 600px) {
+
+  .logo {
+    animation: mobileFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes mobileFloat {
+    0%,100%{
+      transform: translateY(0);
+    }
+
+    50%{
+      transform: translateY(-4px);
+    }
+  }
+
+}
