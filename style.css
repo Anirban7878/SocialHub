@@ -538,44 +538,42 @@ iframe {
   border-radius: 20px;
 }
 
-/* MOBILE */
+/* MOBILE PERFORMANCE FIX */
 @media (max-width: 600px) {
+
+  /* Fixed background lag remove */
   body {
-    padding: 85px 14px 40px;
+    background-attachment: scroll;
   }
 
-  h1 {
-    font-size: 44px;
+  /* Heavy blur disable */
+  .search-box,
+  .settings-panel,
+  .tabs,
+  .logo,
+  .usage-box,
+  .loader,
+  .tab-button,
+  #tabButton {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
-  .search-box {
-    flex-direction: column;
-    padding: 14px;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
-
-  .search-box button {
-    width: 100%;
-  }
-
-  .platforms {
-    gap: 16px;
-  }
-
+  /* Floating animation disable */
   .logo {
-    width: 68px;
-    height: 68px;
+    animation: none;
   }
 
-  .tabs {
-    width: 92%;
-    right: 4%;
+  /* Reduce heavy shadows */
+  .search-box,
+  .settings-panel,
+  .tabs,
+  .logo {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   }
 
-  .settings-panel {
-    width: 260px;
+  /* Faster theme switching */
+  * {
+    transition-duration: 0.15s !important;
   }
 }
