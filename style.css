@@ -435,6 +435,43 @@ input:checked + .slider::before {
 .linkedin:hover { background: rgba(10,102,194,0.9); }
 .twitter:hover { background: rgba(29,161,242,0.9); }
 
+
+.anime-search-box {
+  width: 100%;
+  max-width: 360px;
+}
+
+.anime-search-box input {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.16);
+  outline: none;
+
+  background: rgba(17, 28, 46, 0.62);
+  color: var(--text-color);
+
+  font-size: 15px;
+  font-weight: 700;
+
+  backdrop-filter: blur(18px);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.28);
+
+  transition: 0.3s ease;
+}
+
+.anime-search-box input::placeholder {
+  color: rgba(220, 235, 255, 0.75);
+}
+
+.anime-search-box input:focus {
+  border-color: #00d4ff;
+  box-shadow:
+    0 0 0 3px rgba(0,212,255,0.12),
+    0 0 30px rgba(0,212,255,0.28);
+  transform: translateY(-2px);
+}
+
 .category-section {
   position: relative;
   max-width: 980px;
