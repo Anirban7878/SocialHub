@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+
   <title>SocialHub</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,6 +26,10 @@
     <input type="text" id="search" placeholder="Search anything... 🔍">
     <button onclick="searchAll()">Search All</button>
   </div>
+
+  <button id="installBtn" class="install-btn" style="display: none;">
+  📲 Install SocialHub
+  </button>
 
   <div class="top-bar">
 
@@ -83,10 +91,37 @@
 
   </div>
 
+  <!-- Anime Section -->
+  <section class="category-section anime-section">
+
+  <div class="anime-bg">
+    <video autoplay muted loop playsinline>
+      <source src="videos/anime-bg.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="anime-overlay"></div>
+
+  <div class="category-content">
+    <div class="category-header">
+      <h2>🎌 Anime</h2>
+
+      <div class="language-switch">
+        <button class="lang-btn active" onclick="showAnimePlatforms('hindi', this)">🇮🇳 हिन्दी</button>
+        <button class="lang-btn" onclick="showAnimePlatforms('english', this)">🇺🇸 English</button>
+        <button class="lang-btn" onclick="showAnimePlatforms('japanese', this)">🇯🇵 日本語</button>
+      </div>
+    </div>
+
+    <div id="animePlatforms" class="platforms anime-platforms"></div>
+  </div>
+
+  </section>
+
   <!-- TAB BUTTON -->
-<div class="tab-button" id="tabButton">
-  <span id="tabCount">0</span>
-</div>
+  <div class="tab-button" id="tabButton">
+    <span id="tabCount">0</span>
+  </div>
 
 <!-- Tabs -->
 <div class="tabs" id="tabs"></div>
@@ -97,6 +132,12 @@
 </div>
 
   <script src="script.js"></script>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+  </script>
 
 </body>
 </html>
