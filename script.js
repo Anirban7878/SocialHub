@@ -333,3 +333,113 @@ function searchAll() {
     openTab("Facebook", "https://www.google.com/search?q=site:facebook.com " + encodeURIComponent(q), false);
   }, 500);
 }
+
+const animeData = {
+  hindi: [
+    {
+      name: "Febspot",
+      icon: "https://www.google.com/s2/favicons?domain=febspot.com&sz=128",
+      url: "https://www.febspot.com/",
+      searchUrl: "https://www.febspot.com/search/?q="
+    },
+
+    {
+      name: "Dailymotion",
+      icon: "https://www.google.com/s2/favicons?domain=dailymotion.com&sz=128",
+      url: "https://www.dailymotion.com/in",
+      searchUrl: "https://www.dailymotion.com/search/"
+    },
+
+    {
+      name: "AnimeHub",
+      icon: "https://www.google.com/s2/favicons?domain=animehub.ac&sz=128",
+      url: "https://animehub.ac/",
+      searchUrl: "https://animehub.ac/search/"
+    }
+  ],
+
+  english: [
+    {
+      name: "Enma",
+      icon: "https://www.google.com/s2/favicons?domain=enma.lol&sz=128",
+      url: "https://www.enma.lol/",
+      searchUrl: "https://www.enma.lol/search?keyword="
+    },
+
+    {
+      name: "9anime",
+      icon: "https://www.google.com/s2/favicons?domain=9anime.ms&sz=128",
+      url: "https://9anime.ms/browse",
+      searchUrl: "https://9anime.ms/search?q="
+    }
+  ],
+
+  japanese: [
+    {
+      name: "Enma",
+      icon: "https://www.google.com/s2/favicons?domain=enma.lol&sz=128",
+      url: "https://www.enma.lol/",
+      searchUrl: "https://www.enma.lol/search?keyword="
+    },
+
+    {
+      name: "9anime",
+      icon: "https://www.google.com/s2/favicons?domain=9anime.ms&sz=128",
+      url: "https://9anime.ms/browse",
+      searchUrl: "https://9anime.ms/search?q="
+    }
+  ]
+};
+
+function showAnimePlatforms(language, clickedBtn) {
+
+    const container = document.getElementById("animePlatforms");
+
+    document.querySelectorAll(".lang-btn").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    clickedBtn.classList.add("active");
+
+    // Fade Out
+    container.classList.remove("fade-in");
+    container.classList.add("fade-out");
+
+    setTimeout(() => {
+
+    container.innerHTML = "";
+
+    animeData[language].forEach(site => {
+
+        const img = document.createElement("img");
+
+        img.src = site.icon;
+        img.className = "logo";
+        img.title = site.name;
+
+        img.onclick = () => {
+
+            const q = document.getElementById("search").value.trim();
+
+            // Agar search box empty hai
+            if (q === "") {
+                window.open(site.url, "_blank");
+            }
+            // Agar search likha hua hai
+            else {
+                window.open(site.searchUrl + encodeURIComponent(q), "_blank");
+            }
+
+        };
+
+        container.appendChild(img);
+
+    });
+
+    // Fade In
+    container.classList.remove("fade-out");
+    container.classList.add("fade-in");
+
+}, 250);
+
+}
