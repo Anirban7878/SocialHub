@@ -407,39 +407,59 @@ function showAnimePlatforms(language, clickedBtn) {
 
     setTimeout(() => {
 
-    container.innerHTML = "";
+        container.innerHTML = "";
 
-    animeData[language].forEach(site => {
+        animeData[language].forEach(site => {
 
-        const img = document.createElement("img");
+            const img = document.createElement("img");
 
-        img.src = site.icon;
-        img.className = "logo";
-        img.title = site.name;
+            img.src = site.icon;
+            img.className = "logo";
+            img.title = site.name;
 
         img.onclick = () => {
+          const animeInput = document.getElementById("animeSearch");
+          const finalQuery = animeInput.value.trim();
 
-            const q = document.getElementById("search").value.trim();
+          if (finalQuery === "") {
+            animeInput.focus();
+            animeInput.placeholder = "🔍 First search an anime...";
+            animeInput.classList.add("search-warning");
 
-            // Agar search box empty hai
-            if (q === "") {
-                window.open(site.url, "_blank");
-            }
-            // Agar search likha hua hai
-            else {
-                window.open(site.searchUrl + encodeURIComponent(q), "_blank");
-            }
+            setTimeout(() => {
+              animeInput.placeholder = "Search Anime... 🔍";
+              animeInput.classList.remove("search-warning");
+            }, 2000);
 
+            return;
+          }
+
+          window.open(site.searchUrl + encodeURIComponent(finalQuery), "_blank");
         };
 
-        container.appendChild(img);
+            container.appendChild(img);
+        });
 
-    });
+        // Fade In
+        container.classList.remove("fade-out");
+        container.classList.add("fade-in");
 
-    // Fade In
-    container.classList.remove("fade-out");
-    container.classList.add("fade-in");
-
-}, 250);
+    }, 250);
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const animeSearch = document.getElementById("animeSearch");
+
+  if (animeSearch) {
+    animeSearch.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const activeAnimeLogo = document.querySelector("#animePlatforms .logo");
+
+        if (activeAnimeLogo) {
+          activeAnimeLogo.click();
+        }
+      }
+    });
+  }
+});
