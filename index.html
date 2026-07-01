@@ -27,8 +27,9 @@
     <button onclick="searchAll()">Search All</button>
   </div>
 
-  <button id="installBtn" class="install-btn" style="display: none;">
-  📲 Install SocialHub
+  <button id="installBtn" class="install-btn">
+    <span class="install-icon">📲</span>
+    <span>Install SocialHub</span>
   </button>
 
   <div class="top-bar">
@@ -96,7 +97,7 @@
 
   <div class="anime-bg">
     <video autoplay muted loop playsinline>
-      <source src="anime-bg.mp4" type="video/mp4">
+      <source src="videos/anime-bg.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -123,6 +124,27 @@
 
     <div id="animePlatforms" class="platforms anime-platforms"></div>
   </div>
+
+  </section>
+
+  <section class="category-section movie-section">
+
+    <div class="movie-overlay"></div>
+
+    <div class="category-content">
+      <div class="category-header">
+        <h2>🎬 Movies</h2>
+
+        <div class="anime-search-box">
+          <input 
+            type="text" 
+            id="movieSearch" 
+            placeholder="Search Movies... 🔍"
+          >
+        </div>
+
+      <div id="moviePlatforms" class="platforms movie-platforms"></div>
+    </div>
 
   </section>
 
