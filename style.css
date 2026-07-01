@@ -722,13 +722,14 @@ input:checked + .slider::before {
 
   transform: translate(-50%, -50%) scale(1.35);
 
-  opacity: 0.42;
+  opacity: 1000;
 
   filter:
-    brightness(0.75)
-    saturate(1.35)
+    brightness(0.85)
+    saturate(1.55)
     contrast(1.08)
     blur(0.5px);
+
 
   pointer-events: none;
 }
