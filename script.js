@@ -449,6 +449,7 @@ function showAnimePlatforms(language, clickedBtn) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  showAnimePlatforms("hindi", document.querySelector(".lang-btn.active"));
   const animeSearch = document.getElementById("animeSearch");
 
   if (animeSearch) {
@@ -462,4 +463,115 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+});
+
+const movieData = [
+  {
+    name: "IMDb",
+    icon: "https://www.google.com/s2/favicons?domain=imdb.com&sz=128",
+    url: "https://www.imdb.com/",
+    searchUrl: "https://www.imdb.com/find/?q="
+  },
+
+  {
+    name: "Hdhub4u",
+    icon: "https://www.google.com/s2/favicons?domain=hdhub4u.cl&sz=128",
+    url: "https://new2.hdhub4u.cl",
+    searchUrl: "https://new2.hdhub4u.cl/search.html?q="
+  },
+
+  {
+    name: "VegaMovies",
+    icon: "https://www.google.com/s2/favicons?domain=vegamovies.navy&sz=128",
+    url: "https://vegamovies.navy",
+    searchUrl: "https://vegamovies.navy/search.html?q="
+  }
+];
+
+function showMoviePlatforms() {
+
+    const container = document.getElementById("moviePlatforms");
+
+    container.innerHTML = "";
+
+    movieData.forEach(site => {
+
+        const img = document.createElement("img");
+
+        img.src = site.icon;
+        img.className = "logo";
+        img.title = site.name;
+
+        img.onclick = () => {
+
+            const movieInput = document.getElementById("movieSearch");
+            const finalQuery = movieInput.value.trim();
+
+            if (finalQuery === "") {
+
+                movieInput.focus();
+                movieInput.placeholder = "🔍 First search a movie...";
+                movieInput.classList.add("search-warning");
+
+                setTimeout(() => {
+                    movieInput.placeholder = "Search Movies... 🔍";
+                    movieInput.classList.remove("search-warning");
+                }, 2000);
+
+                return;
+            }
+
+            window.open(site.searchUrl + encodeURIComponent(finalQuery), "_blank");
+
+        };
+
+        container.appendChild(img);
+
+    });
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  showMoviePlatforms();
+
+  const movieSearch = document.getElementById("movieSearch");
+
+  if (movieSearch) {
+    movieSearch.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const firstMovieLogo = document.querySelector("#moviePlatforms .logo");
+        if (firstMovieLogo) firstMovieLogo.click();
+      }
+    });
+  }
+});
+
+// ==========================
+// 📲 PWA INSTALL BUTTON
+// ==========================
+
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    alert("Install option abhi browser ne allow nahi kiya. Address bar ke install icon se try karo.");
+    return;
+  }
+
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "flex";
+});
+
+window.addEventListener("appinstalled", () => {
+  installBtn.style.display = "none";
 });
